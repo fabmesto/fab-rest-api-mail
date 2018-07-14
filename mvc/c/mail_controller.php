@@ -20,7 +20,7 @@ class mail_controller extends \fab\fab_controller {
 
       $postdata = file_get_contents("php://input");
       $_POST = json_decode($postdata, true);
-      
+
       if(isset($_POST['email'])){
         $subject = str_replace('[email]', $_POST['email'], $subject);
         $message = str_replace('[email]', $_POST['email'], $message);
@@ -33,7 +33,10 @@ class mail_controller extends \fab\fab_controller {
         $subject = str_replace('[message]', $_POST['message'], $subject);
         $message = str_replace('[message]', $_POST['message'], $message);
       }
-      wp_mail( $to, $subject, $message );
+      $emails = preg_split('/[;]/', $to);
+      foreach($emails as $to){
+        wp_mail( trim($to), $subject, $message );
+      }
       return array(
         "code" => "ok",
         "message" => "Messaggio inviato con successo",
