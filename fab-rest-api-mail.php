@@ -65,6 +65,7 @@ if(class_exists('\fab\Fab_Base')){
       register_setting( 'fabrestapimail-options', 'mailrestapi_email' );
       register_setting( 'fabrestapimail-options', 'mailrestapi_subject' );
       register_setting( 'fabrestapimail-options', 'mailrestapi_message' );
+      register_setting( 'fabrestapimail-options', 'mailrestapi_message_from' );
     }
   }
 
