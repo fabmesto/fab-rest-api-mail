@@ -2,7 +2,7 @@
 /*
 Plugin Name: Fab Rest Api Mail
 Plugin URI: https://www.telnetsrl.com/
-Description: Plugin gestione Canili per Mapia
+Description: Plugin per inviare mail by restapi
 Author: Fabrizio MESTO
 Version: 0.0.1
 Author URI: https://www.telnetsrl.com/
