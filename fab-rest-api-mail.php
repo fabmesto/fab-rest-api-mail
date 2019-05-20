@@ -70,4 +70,9 @@ if(class_exists('\fab\Fab_Base')){
   }
 
   new Fab_RestApiMail();
+}else{
+  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+  if ( !is_plugin_active( 'fab-base-plugin/fab-base.php' ) ){
+    echo "Questo plugin richiede fab-base";
+  }
 }
