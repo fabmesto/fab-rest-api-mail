@@ -45,7 +45,6 @@ if (!class_exists('restapimail\settings')) {
 
         public function register_settings()
         { // whitelist options
-            register_setting('fabrestapimail-options', $this->parent->shortcode->macaddress_name);
             register_setting('fabrestapimail-options', 'mailrestapi_email');
             register_setting('fabrestapimail-options', 'mailrestapi_subject');
             register_setting('fabrestapimail-options', 'mailrestapi_message');
