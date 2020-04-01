@@ -23,8 +23,8 @@ if (!class_exists('restapimail\settings')) {
             // add_options_page -> Impostazioni
             // add_menu_page -> in ROOT
             add_menu_page(
-                'Fab Rest Api Mail',
-                'Fab Rest Api Mail',
+                'Email settings (FAB)',
+                'Email settings (FAB)',
                 'manage_options',
                 'fabrestapimail_settings',
                 array(&$this, 'settings')
@@ -49,6 +49,10 @@ if (!class_exists('restapimail\settings')) {
             register_setting('fabrestapimail-options', 'mailrestapi_subject');
             register_setting('fabrestapimail-options', 'mailrestapi_message');
             register_setting('fabrestapimail-options', 'mailrestapi_message_from');
+            register_setting('fabrestapimail-options', 'mailrestapi_mittente_email');
+            register_setting('fabrestapimail-options', 'mailrestapi_mittente_nome');
+            register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_subject');
+            register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_message');
         }
     }
 }
