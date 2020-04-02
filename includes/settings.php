@@ -44,19 +44,15 @@ if (!class_exists('restapimail\settings')) {
         }
 
         public function register_settings()
-        {
+        { // whitelist options
             register_setting('fabrestapimail-options', 'mailrestapi_email');
             register_setting('fabrestapimail-options', 'mailrestapi_subject');
             register_setting('fabrestapimail-options', 'mailrestapi_message');
             register_setting('fabrestapimail-options', 'mailrestapi_message_from');
-            // mittente
             register_setting('fabrestapimail-options', 'mailrestapi_mittente_email');
             register_setting('fabrestapimail-options', 'mailrestapi_mittente_nome');
-            // nuovo utente email
             register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_subject');
             register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_message');
-            // login head
-            register_setting('fabrestapimail-options', 'mailrestapi_login_head');
         }
     }
 }

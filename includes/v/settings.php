@@ -45,14 +45,6 @@
       </tr>
     </table>
 
-    <h3>Logo Login</h3>
-    <table class="form-table">
-      <tr valign="top">
-        <th scope="row">Url logo Login</th>
-        <td><input type="text" name="mailrestapi_login_head" value="<?php echo esc_attr(get_option('mailrestapi_login_head', '')); ?>" style="width:100%" /></td>
-      </tr>
-    </table>
-
     <h3>Email a nuovi iscritti</h3>
     <table class="form-table">
       <tr valign="top">

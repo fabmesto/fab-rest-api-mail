@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Fab Options
+Plugin Name: Fab Rest Api Mail
 Plugin URI: https://www.telnetsrl.com/
-Description: Plugin per opzioni avanzate come inviare mail by restapi
+Description: Plugin per inviare mail by restapi
 Author: Fabrizio MESTO
 Version: 0.0.1
 Author URI: https://www.telnetsrl.com/
@@ -23,7 +23,7 @@ if (!defined(__NAMESPACE__ . '\FAB_PLUGIN_DIR_URL')) define(__NAMESPACE__ . '\FA
 
 if (class_exists('\fab\Fab_Base')) {
 
-  class Fab_Options extends \fab\Fab_Base
+  class Fab_RestApiMail extends \fab\Fab_Base
   {
     public $shortcode_name = 'fab-rest-api-mail';
 
@@ -50,7 +50,7 @@ if (class_exists('\fab\Fab_Base')) {
     }
   }
 
-  new Fab_Options();
+  new Fab_RestApiMail();
 } else {
   include_once(ABSPATH . 'wp-admin/includes/plugin.php');
   if (!is_plugin_active('fab-base-plugin/fab-base.php')) {
