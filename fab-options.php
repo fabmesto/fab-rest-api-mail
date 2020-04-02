@@ -6,11 +6,11 @@ Description: Plugin per opzioni avanzate come inviare mail by restapi
 Author: Fabrizio MESTO
 Version: 0.0.1
 Author URI: https://www.telnetsrl.com/
-Text Domain: fabrestapimail
+Text Domain: faboptions
 Domain Path: lang
 */
 
-namespace restapimail;
+namespace faboptions;
 
 defined('ABSPATH') or die('No script kiddies please!');
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace restapimail;
+namespace faboptions;
 
-if (!class_exists('restapimail\settings')) {
+if (!class_exists('faboptions\settings')) {
     class settings
     {
         var $parent = false;
@@ -26,7 +26,7 @@ if (!class_exists('restapimail\settings')) {
                 'Settings Admin',
                 'Email settings (FAB)',
                 'manage_options',
-                'fabrestapimail_settings',
+                'faboptions_settings',
                 array(&$this, 'settings')
             );
         }
@@ -45,18 +45,18 @@ if (!class_exists('restapimail\settings')) {
 
         public function register_settings()
         {
-            register_setting('fabrestapimail-options', 'mailrestapi_email');
-            register_setting('fabrestapimail-options', 'mailrestapi_subject');
-            register_setting('fabrestapimail-options', 'mailrestapi_message');
-            register_setting('fabrestapimail-options', 'mailrestapi_message_from');
+            register_setting('faboptions-options', 'mailrestapi_email');
+            register_setting('faboptions-options', 'mailrestapi_subject');
+            register_setting('faboptions-options', 'mailrestapi_message');
+            register_setting('faboptions-options', 'mailrestapi_message_from');
             // mittente
-            register_setting('fabrestapimail-options', 'mailrestapi_mittente_email');
-            register_setting('fabrestapimail-options', 'mailrestapi_mittente_nome');
+            register_setting('faboptions-options', 'mailrestapi_mittente_email');
+            register_setting('faboptions-options', 'mailrestapi_mittente_nome');
             // nuovo utente email
-            register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_subject');
-            register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_message');
+            register_setting('faboptions-options', 'mailrestapi_new_user_notification_email_subject');
+            register_setting('faboptions-options', 'mailrestapi_new_user_notification_email_message');
             // login head
-            register_setting('fabrestapimail-options', 'mailrestapi_login_head');
+            register_setting('faboptions-options', 'mailrestapi_login_head');
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace restapimail;
+namespace faboptions;
 
 class mail_controller extends \fab\fab_controller
 {
@@ -49,7 +49,7 @@ class mail_controller extends \fab\fab_controller
 
       wp_mail(trim($_POST['email']), $subject, $message_from);
 
-      do_action('restapimail_sent_message', array(
+      do_action('faboptions_sent_message', array(
         'to' => $_POST['email'],
         'subject' => $subject,
         'message' => $message,
