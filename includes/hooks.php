@@ -1,8 +1,8 @@
 <?php
 
-namespace faboptions;
+namespace restapimail;
 
-if (!class_exists('faboptions\hooks')) {
+if (!class_exists('restapimail\hooks')) {
 
     class hooks
     {

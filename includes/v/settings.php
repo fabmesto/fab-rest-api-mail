@@ -4,8 +4,8 @@
   <?php settings_errors(); ?>
 
   <form method="post" action="options.php">
-    <?php settings_fields('faboptions-options');
-    do_settings_sections('faboptions-options');
+    <?php settings_fields('fabrestapimail-options');
+    do_settings_sections('fabrestapimail-options');
     ?>
     <h3>REST api</h3>
     <table class="form-table">
