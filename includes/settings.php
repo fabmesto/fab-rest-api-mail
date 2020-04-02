@@ -22,8 +22,8 @@ if (!class_exists('restapimail\settings')) {
             // add_management_page -> Strumenti
             // add_options_page -> Impostazioni
             // add_menu_page -> in ROOT
-            add_menu_page(
-                'Email settings (FAB)',
+            add_options_page(
+                'Settings Admin',
                 'Email settings (FAB)',
                 'manage_options',
                 'fabrestapimail_settings',

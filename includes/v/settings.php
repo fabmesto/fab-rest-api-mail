@@ -50,7 +50,7 @@
       <tr valign="top">
         <th scope="row">Nei campi seguenti, puoi utilizzare questi mail-tag:</th>
         <td>
-          <b><i>{blogname}</i></b>
+          {blogname} {user_login} {user_email} {user_first_name} {user_last_name}
         </td>
       </tr>
       <tr valign="top">
@@ -58,8 +58,8 @@
         <td><input type="text" name="mailrestapi_new_user_notification_email_subject" value="<?php echo esc_attr(get_option('mailrestapi_new_user_notification_email_subject', '')); ?>" style="width:100%" /></td>
       </tr>
       <tr valign="top">
-        <th scope="row">Testo del messaggio da inviare al mittente</th>
-        <td><textarea name="mailrestapi_new_user_notification_email_message" style="width:100%"><?php echo esc_attr(get_option('mailrestapi_new_user_notification_email_message', '')); ?></textarea></td>
+        <th scope="row">HTML del messaggio da inviare al mittente</th>
+        <td><?php wp_editor(get_option('mailrestapi_new_user_notification_email_message', ''), 'mailrestapi_new_user_notification_email_message'); ?></td>
       </tr>
     </table>
 
