@@ -57,6 +57,10 @@ if (!class_exists('restapimail\settings')) {
             register_setting('fabrestapimail-options', 'mailrestapi_new_user_notification_email_message');
             // login head
             register_setting('fabrestapimail-options', 'mailrestapi_login_head');
+            // last_login
+            register_setting('fabrestapimail-options', 'mailrestapi_last_login');
+            // adsense
+            register_setting('fabrestapimail-options', 'mailrestapi_adsense');
         }
     }
 }

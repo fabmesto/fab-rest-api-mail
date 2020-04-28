@@ -12,6 +12,100 @@ if (!class_exists('restapimail\hooks')) {
             add_filter('wp_mail_from', array(&$this, 'wp_mail_from'), 10, 3);
             add_filter('wp_mail_from_name', array(&$this, 'wp_mail_from_name'), 10, 3);
             add_filter('login_head', array(&$this, 'login_head'), 10, 3);
+
+            add_action('wp_head', array(&$this, 'wp_head'));
+            // user last login
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                add_action('wp_login', array(&$this, 'user_last_login'), 10, 2);
+                add_filter('manage_users_columns', array(&$this, 'manage_users_columns'));
+                add_filter('manage_users_custom_column', array(&$this, 'manage_users_custom_column'), 10, 3);
+                add_filter('manage_users_sortable_columns', array(&$this, 'manage_users_sortable_columns'));
+                add_action('pre_get_users', array(&$this, 'pre_get_users'));
+            }
+        }
+
+
+        function wp_head()
+        {
+            if (is_page() || is_single()) {
+                $post_id = get_queried_object_id();
+                $disable_adsense = get_post_meta($post_id, 'disable_adsense', true);
+
+                if ($disable_adsense != '1') {
+                    // solo se non vuoi disabilitare adsense in questa pagina
+                    $adsense = get_option('mailrestapi_adsense', '');
+                    if ($adsense != '') {
+                        echo $adsense;
+                    }
+                }
+            }
+        }
+
+        public function pre_get_users($query)
+        {
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                if ('last_login' == $query->get('orderby')) {
+                    $query->set('meta_query', array(
+                        'relation' => 'OR',
+                        array(
+                            'key' => 'last_login',
+                            'compare' => 'EXISTS'
+                        ),
+                        array(
+                            'key' => 'last_login',
+                            'compare' => 'NOT EXISTS'
+                        )
+                    ));
+                    $query->set('orderby', 'meta_value_num');
+                }
+            }
+        }
+
+        public function manage_users_sortable_columns($columns)
+        {
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                $columns['last_login'] = 'last_login';
+            }
+            return $columns;
+        }
+
+        public function manage_users_columns($columns)
+        {
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                $columns['last_login'] = __('Ultima login');
+            }
+            return $columns;
+        }
+
+        public function manage_users_custom_column($value, $column_name, $user_id)
+        {
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                if ('last_login' == $column_name) {
+                    $last_login = get_the_author_meta('last_login', $user_id);
+                    if ($last_login != '') {
+                        $the_login_date = human_time_diff($last_login);
+                        $value = $the_login_date;
+                    } else {
+                        $value = 'Mai';
+                    }
+                }
+            }
+            return $value;
+        }
+        /**
+         * Cattura il login salvando il time
+         *
+         */
+        public function user_last_login($user_login, $user)
+        {
+            if (get_option('mailrestapi_last_login', '0') == '1') {
+                update_user_meta($user->ID, 'last_login', time());
+                /*
+                $last_login = get_the_author_meta('last_login');
+                $the_login_date = human_time_diff($last_login);
+                return $the_login_date; 
+                */
+            }
         }
 
         public function wp_mail_from($old)

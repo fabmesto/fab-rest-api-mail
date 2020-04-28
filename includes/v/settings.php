@@ -53,6 +53,19 @@
       </tr>
     </table>
 
+    <h3>Registra ultima login degli utenti</h3>
+    <table class="form-table">
+      <tr valign="top">
+        <th scope="row">Registra data e ora dell'ultima Login</th>
+        <td>
+          <select name="mailrestapi_last_login">
+            <option value="0" <?php echo (get_option('mailrestapi_last_login', '0') == '0' ? 'selected' : ''); ?>>No</option>
+            <option value="1" <?php echo (get_option('mailrestapi_last_login', '0') == '1' ? 'selected' : ''); ?>>Si</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
     <h3>Email a nuovi iscritti</h3>
     <table class="form-table">
       <tr valign="top">
@@ -68,6 +81,14 @@
       <tr valign="top">
         <th scope="row">HTML del messaggio da inviare al mittente</th>
         <td><?php wp_editor(get_option('mailrestapi_new_user_notification_email_message', ''), 'mailrestapi_new_user_notification_email_message'); ?></td>
+      </tr>
+    </table>
+
+    <h3>Adsense</h3>
+    <table class="form-table">
+      <tr valign="top">
+        <th scope="row">Codice adsense</th>
+        <td><textarea name="mailrestapi_adsense" style="width:100%"><?php echo esc_attr(get_option('mailrestapi_adsense', '')); ?></textarea></td>
       </tr>
     </table>
 

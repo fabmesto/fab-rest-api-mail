@@ -47,6 +47,9 @@ if (class_exists('\fab\Fab_Base')) {
 
       require FAB_PLUGIN_DIR_PATH . 'includes/hooks.php';
       new hooks();
+
+      require FAB_PLUGIN_DIR_PATH . 'includes/metabox.php';
+      new metabox();
     }
   }
 
