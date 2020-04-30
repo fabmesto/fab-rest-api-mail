@@ -27,14 +27,14 @@ if (!class_exists('restapimail\hooks')) {
 
         function wp_head()
         {
-            if (is_page() || is_single()) {
-                $post_id = get_queried_object_id();
-                $disable_adsense = get_post_meta($post_id, 'disable_adsense', true);
+            $adsense = get_option('mailrestapi_adsense', '');
+            if ($adsense != '') {
+                if (is_page() || is_single()) {
+                    $post_id = get_queried_object_id();
+                    $disable_adsense = get_post_meta($post_id, 'disable_adsense', true);
 
-                if ($disable_adsense != '1') {
-                    // solo se non vuoi disabilitare adsense in questa pagina
-                    $adsense = get_option('mailrestapi_adsense', '');
-                    if ($adsense != '') {
+                    if ($disable_adsense != '1') {
+                        // solo se non vuoi disabilitare adsense in questa pagina
                         echo $adsense;
                     }
                 }
