@@ -66,6 +66,7 @@ if (!class_exists('restapimail\hooks')) {
             if (get_option('mailrestapi_last_login', '0') == '1') {
                 $columns['last_login'] = 'last_login';
             }
+            $columns['registration_date'] = 'registered';
             return $columns;
         }
 
@@ -74,21 +75,30 @@ if (!class_exists('restapimail\hooks')) {
             if (get_option('mailrestapi_last_login', '0') == '1') {
                 $columns['last_login'] = __('Ultima login');
             }
+            $columns['registration_date'] =  __('Data registrazione');
             return $columns;
         }
 
         public function manage_users_custom_column($value, $column_name, $user_id)
         {
-            if (get_option('mailrestapi_last_login', '0') == '1') {
-                if ('last_login' == $column_name) {
-                    $last_login = get_the_author_meta('last_login', $user_id);
-                    if ($last_login != '') {
-                        $the_login_date = human_time_diff($last_login);
-                        $value = $the_login_date;
-                    } else {
-                        $value = 'Mai';
+            switch ($column_name) {
+                case 'registration_date':
+                    $date_format = 'j M, Y H:i';
+                    return date($date_format, strtotime(get_the_author_meta('registered', $user_id)));
+                    break;
+                case 'last_login':
+                    if (get_option('mailrestapi_last_login', '0') == '1') {
+                        $last_login = get_the_author_meta('last_login', $user_id);
+                        if ($last_login != '') {
+                            $the_login_date = human_time_diff($last_login);
+                            $value = $the_login_date;
+                        } else {
+                            $value = 'Mai';
+                        }
+                        return $value;
                     }
-                }
+                    break;
+                default:
             }
             return $value;
         }
