@@ -41,19 +41,29 @@ class mail_controller extends \fab\fab_controller
         $message = str_replace('[message]', $_POST['message'], $message);
         $message_from = str_replace('[message]', $_POST['message'], $message_from);
       }
+      if (isset($_POST['id_user'])) {
+        $id_user = intval($_POST['id_user']);
+      } else {
+        $id_user = 0;
+      }
       $emails = preg_split('/[;]/', $to);
       foreach ($emails as $to) {
         wp_mail(trim($to), $subject, $message);
       }
       // manda la mail anche alla persona che ha inviato il messaggio
 
-      wp_mail(trim($_POST['email']), $subject, $message_from);
-
-      do_action('restapimail_sent_message', array(
+      $sent = \wp_mail(trim($_POST['email']), $subject, $message_from);
+      $args_action = array(
         'to' => $_POST['email'],
         'subject' => $subject,
         'message' => $message,
-      ));
+        'id_user' => $id_user,
+      );
+      if ($sent) {
+        do_action('restapimail_sent_message_ok', $args_action);
+      } else {
+        do_action('restapimail_sent_message_fail', $args_action);
+      }
       return array(
         "code" => "ok",
         "message" => "Messaggio inviato con successo",
