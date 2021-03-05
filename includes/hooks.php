@@ -22,8 +22,14 @@ if (!class_exists('restapimail\hooks')) {
                 add_filter('manage_users_sortable_columns', array(&$this, 'manage_users_sortable_columns'));
                 add_action('pre_get_users', array(&$this, 'pre_get_users'));
             }
+
+            add_action('resetpass_form', array(&$this, 'resetpass_form'));
         }
 
+        function resetpass_form($user)
+        {
+            // echo "Ciao ".$user->display_name;
+        }
 
         function wp_head()
         {
