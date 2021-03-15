@@ -53,7 +53,7 @@ if (class_exists('\fab\Fab_Base')) {
     }
   }
 
-  new Fab_RestApiMail();
+  $BASE = Fab_RestApiMail::getInstance();
 } else {
   include_once(ABSPATH . 'wp-admin/includes/plugin.php');
   if (!is_plugin_active('fab-base-plugin/fab-base.php')) {
