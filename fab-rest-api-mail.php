@@ -46,9 +46,14 @@ if (class_exists('\fab\Fab_Base')) {
       require FAB_PLUGIN_DIR_PATH . 'includes/metabox.php';
       new metabox();
     }
+
+    public static function get_static()
+    {
+      return new static();
+    }
   }
 
-  $BASE = Fab_RestApiMail::getInstance();
+  $BASE = Fab_RestApiMail::getInstance(Fab_RestApiMail::get_static());
 } else {
   include_once(ABSPATH . 'wp-admin/includes/plugin.php');
   if (!is_plugin_active('fab-base-plugin/fab-base.php')) {
