@@ -126,12 +126,20 @@ if (!class_exists('restapimail\hooks')) {
 
         public function wp_mail_from($old)
         {
-            return get_option('mailrestapi_mittente_email', $old);
+            $new = get_option('mailrestapi_mittente_email', $old);
+            if ($new == '') {
+                return $old;
+            }
+            return $new;
         }
 
         public function wp_mail_from_name($old)
         {
-            return get_option('mailrestapi_mittente_nome', $old);
+            $new = get_option('mailrestapi_mittente_nome', $old);
+            if ($new == '') {
+                return $old;
+            }
+            return $new;
         }
 
         public function wp_new_user_notification_email($wp_new_user_notification_email, $user, $blogname)
