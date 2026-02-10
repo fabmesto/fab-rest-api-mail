@@ -9,9 +9,94 @@ class mail_controller extends \fab\fab_controller
 
   public function rest_save()
   {
+    $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : '';
+    if ($action !== 'public_support') {
+      return array(
+        "code" => "error",
+        "message" => "Azione non valida!",
+        "data" => array("status" => 400),
+      );
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      return array(
+        "code" => "error",
+        "message" => "Metodo non consentito!",
+        "data" => array("status" => 405),
+      );
+    }
+
+    $postdata = file_get_contents("php://input");
+    $_POST = json_decode($postdata, true);
+    if (!is_array($_POST)) {
+      $_POST = array();
+    }
+
+    $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+    $subject_input = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
+    $message_input = isset($_POST['message']) ? wp_strip_all_tags((string) $_POST['message']) : '';
+
+    if (!is_email($email) || empty($subject_input) || empty($message_input)) {
+      return array(
+        "code" => "error",
+        "message" => "Dati non validi!",
+        "data" => array("status" => 400),
+      );
+    }
+
+    $remote_addr = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field($_SERVER['REMOTE_ADDR']) : 'unknown';
+    $rate_key = 'restapimail_public_support_' . md5(strtolower($email) . '|' . $remote_addr);
+    if (get_transient($rate_key)) {
+      return array(
+        "code" => "error",
+        "message" => "Richiesta troppo frequente. Riprova tra un minuto.",
+        "data" => array("status" => 429),
+      );
+    }
+    set_transient($rate_key, 1, 60);
+
+    $to = get_option('mailrestapi_email', '');
+    $subject = get_option('mailrestapi_subject', '');
+    $message = get_option('mailrestapi_message', '');
+    $message_from = get_option('mailrestapi_message_from', '');
+
+    $subject = str_replace('[email]', $email, $subject);
+    $message = str_replace('[email]', $email, $message);
+    $message_from = str_replace('[email]', $email, $message_from);
+
+    $subject = str_replace('[subject]', $subject_input, $subject);
+    $message = str_replace('[subject]', $subject_input, $message);
+    $message_from = str_replace('[subject]', $subject_input, $message_from);
+
+    $subject = str_replace('[message]', $message_input, $subject);
+    $message = str_replace('[message]', $message_input, $message);
+    $message_from = str_replace('[message]', $message_input, $message_from);
+
+    $emails = preg_split('/[;]/', (string) $to);
+    foreach ($emails as $to_email) {
+      $to_email = trim($to_email);
+      if ($to_email !== '') {
+        wp_mail($to_email, $subject, $message);
+      }
+    }
+
+    $sent = wp_mail($email, $subject, $message_from);
+    $args_action = array(
+      'to' => $email,
+      'subject' => $subject,
+      'message' => $message,
+      'id_user' => 0,
+    );
+    if ($sent) {
+      do_action('restapimail_sent_message_ok', $args_action);
+    } else {
+      do_action('restapimail_sent_message_fail', $args_action);
+    }
+
     return array(
-      "code" => "error",
-      "message" => "not implement!",
+      "code" => "ok",
+      "message" => "Messaggio inviato con successo",
+      "data" => array("sent" => true),
     );
   }
 
