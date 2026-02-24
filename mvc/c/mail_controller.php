@@ -35,8 +35,9 @@ class mail_controller extends \fab\fab_controller
     $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
     $subject_input = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
     $message_input = isset($_POST['message']) ? wp_strip_all_tags((string) $_POST['message']) : '';
+    $captcha_token = isset($_POST['captcha_token']) ? sanitize_text_field($_POST['captcha_token']) : '';
 
-    if (!is_email($email) || empty($subject_input) || empty($message_input)) {
+    if (!is_email($email) || empty($subject_input) || empty($message_input) || empty($captcha_token)) {
       return array(
         "code" => "error",
         "message" => "Dati non validi!",
@@ -54,6 +55,23 @@ class mail_controller extends \fab\fab_controller
       );
     }
     set_transient($rate_key, 1, 60);
+
+    $turnstile_secret = get_option('mailrestapi_turnstile_secret_key', '');
+    if (empty($turnstile_secret)) {
+      return array(
+        "code" => "error",
+        "message" => "Captcha non configurato lato server.",
+        "data" => array("status" => 500),
+      );
+    }
+
+    if (!$this->verify_turnstile_token($captcha_token, $remote_addr, $turnstile_secret)) {
+      return array(
+        "code" => "error",
+        "message" => "Verifica captcha non valida.",
+        "data" => array("status" => 400),
+      );
+    }
 
     $to = get_option('mailrestapi_email', '');
     $subject = get_option('mailrestapi_subject', '');
@@ -102,6 +120,17 @@ class mail_controller extends \fab\fab_controller
 
   public function rest_read()
   {
+    $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : '';
+    if ($action === 'public_support_config') {
+      return array(
+        "code" => "ok",
+        "message" => "Config supporto pubblico",
+        "data" => array(
+          "turnstile_site_key" => get_option('mailrestapi_turnstile_site_key', ''),
+        ),
+      );
+    }
+
     if (current_user_can('edit_pages') == 1) {
       $to = get_option('mailrestapi_email', '');
       $subject = get_option('mailrestapi_subject', '');
@@ -160,5 +189,36 @@ class mail_controller extends \fab\fab_controller
         "message" => "Non sei amministratore!",
       );
     }
+  }
+
+  private function verify_turnstile_token($token, $remote_addr, $secret)
+  {
+    $response = wp_remote_post(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      array(
+        'timeout' => 10,
+        'body' => array(
+          'secret' => $secret,
+          'response' => $token,
+          'remoteip' => $remote_addr,
+        ),
+      )
+    );
+
+    if (is_wp_error($response)) {
+      return false;
+    }
+
+    $status = wp_remote_retrieve_response_code($response);
+    if ($status !== 200) {
+      return false;
+    }
+
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($body) || !isset($body['success'])) {
+      return false;
+    }
+
+    return $body['success'] === true;
   }
 }

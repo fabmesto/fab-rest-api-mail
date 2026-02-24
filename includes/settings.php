@@ -61,6 +61,9 @@ if (!class_exists('restapimail\settings')) {
             register_setting('fabrestapimail-options', 'mailrestapi_last_login');
             // adsense
             register_setting('fabrestapimail-options', 'mailrestapi_adsense');
+            // cloudflare turnstile
+            register_setting('fabrestapimail-options', 'mailrestapi_turnstile_site_key');
+            register_setting('fabrestapimail-options', 'mailrestapi_turnstile_secret_key');
         }
     }
 }

@@ -33,6 +33,18 @@
       </tr>
     </table>
 
+    <h3>Captcha supporto pubblico (Cloudflare Turnstile)</h3>
+    <table class="form-table">
+      <tr valign="top">
+        <th scope="row">Turnstile Site Key</th>
+        <td><input type="text" name="mailrestapi_turnstile_site_key" value="<?php echo esc_attr(get_option('mailrestapi_turnstile_site_key', '')); ?>" style="width:100%" /></td>
+      </tr>
+      <tr valign="top">
+        <th scope="row">Turnstile Secret Key</th>
+        <td><input type="password" name="mailrestapi_turnstile_secret_key" value="<?php echo esc_attr(get_option('mailrestapi_turnstile_secret_key', '')); ?>" style="width:100%" autocomplete="new-password" /></td>
+      </tr>
+    </table>
+
     <h3>Parametri mittente email WP</h3>
     <table class="form-table">
       <tr valign="top">
