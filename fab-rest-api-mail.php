@@ -32,9 +32,24 @@ if (class_exists('\fab\Fab_Base')) {
     public $NAMESPACE = __NAMESPACE__;
     public $macaddress_name = "mailrestapi_macaddress";
     public $rewrite_rule = true;
+    public $rest_permission_mode = 'enforce';
+    public $public_rest_actions = [
+      'read' => [
+        'mail' => [
+          'public_support_config',
+        ],
+      ],
+      'save' => [
+        'mail' => [
+          'public_support',
+        ],
+      ],
+    ];
 
     public function plugins_loaded()
     {
+      add_filter($this->NAMESPACE . '_rest_permission', [$this, 'rest_permission'], 10, 6);
+
       parent::plugins_loaded();
 
       require FAB_PLUGIN_DIR_PATH . 'includes/settings.php';
@@ -45,6 +60,42 @@ if (class_exists('\fab\Fab_Base')) {
 
       require FAB_PLUGIN_DIR_PATH . 'includes/metabox.php';
       new metabox();
+    }
+
+    public function rest_permission($permission, $parent, $route_action, $controller, $action, $request)
+    {
+      if ($parent !== $this) {
+        return $permission;
+      }
+
+      if ($this->can_use_public_rest_action($route_action, $controller, $action)) {
+        return true;
+      }
+
+      if (is_user_logged_in() && current_user_can('edit_pages')) {
+        return true;
+      }
+
+      if (!is_user_logged_in()) {
+        return null;
+      }
+
+      return new \WP_Error(
+        'restapimail_rest_forbidden',
+        'Non autorizzato',
+        [
+          'status' => 403,
+          'controller' => $controller,
+          'rest_route_action' => $route_action,
+          'rest_action' => $action,
+        ]
+      );
+    }
+
+    private function can_use_public_rest_action($route_action, $controller, $action)
+    {
+      return ($route_action === 'read' && $controller === 'mail' && $action === 'public_support_config')
+        || ($route_action === 'save' && $controller === 'mail' && $action === 'public_support');
     }
   }
 
