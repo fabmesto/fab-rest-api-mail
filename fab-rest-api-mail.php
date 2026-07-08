@@ -45,6 +45,8 @@ if (class_exists('\fab\Fab_Base')) {
         ],
       ],
     ];
+    public $public_ajax_mode = 'enforce';
+    public $public_ajax_actions = [];
 
     public function plugins_loaded()
     {
